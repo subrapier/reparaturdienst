@@ -1,47 +1,47 @@
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { client } from "@/sanity/client"
-import Image from "next/image"
-import { urlForImage } from "@/sanity/image"
-import { Skeleton } from "./ui/skeleton"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { client } from "@/sanity/client";
+import Image from "next/image";
+import { urlForImage } from "@/sanity/image";
+import { Skeleton } from "./ui/skeleton";
 
 interface Page {
-  _id: string
-  title: string
-  slug: string | { current: string }
-  sortOrder?: number
+  _id: string;
+  title: string;
+  slug: string | { current: string };
+  sortOrder?: number;
 }
 
 interface Settings {
   logo: {
     asset: {
-      _ref: string
-    }
-  }
-  websiteName: string
-  showTextInMenu: boolean
-  showLogoInMenu: boolean
+      _ref: string;
+    };
+  };
+  websiteName: string;
+  showTextInMenu: boolean;
+  showLogoInMenu: boolean;
 }
 
-const useBlog = process.env.NEXT_PUBLIC_USEBLOG === "true";
+const useTips = process.env.NEXT_PUBLIC_USEBLOG === "true";
 
 export function Navigation() {
-  const pathname = usePathname()
-  const { scrollY } = useScroll()
-  const logoX = useTransform(scrollY, [0, 100], [0, -24])
-  const linksOpacity = useTransform(scrollY, [0, 100], [1, 0])
-  const [pages, setPages] = useState<Page[]>([])
-  const [settings, setSettings] = useState<Settings | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname();
+  const { scrollY } = useScroll();
+  const logoX = useTransform(scrollY, [0, 100], [0, -24]);
+  const linksOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+  const [pages, setPages] = useState<Page[]>([]);
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true)
+        setIsLoading(true);
         // Update the pages query to include and sort by sortOrder
         const [pagesData, settingsData] = await Promise.all([
           client.fetch<Page[]>(`
@@ -59,53 +59,57 @@ export function Navigation() {
               showTextInMenu,
               showLogoInMenu
             }
-          `)
-        ])
+          `),
+        ]);
 
         let newdata = null;
-        if (useBlog === true) {
+        if (useTips === true) {
           newdata = {
-            _id: "blog",
-            title: "Blog",
-            slug: "blog",
-            sortOrder: -1  // Ensure blog appears after home but before other pages
+            _id: "tips",
+            title: "Tipps & Tricks",
+            slug: "tips",
+            sortOrder: -1, // Ensure tips appears after home but before other pages
           };
         }
 
-        const finalPages = [{
-          _id: "home",
-          title: "Home",
-          slug: "",
-          sortOrder: -2  // Ensure home always appears first
-        }, ...(newdata ? [newdata] : []), ...pagesData];
+        const finalPages = [
+          {
+            _id: "home",
+            title: "Home",
+            slug: "",
+            sortOrder: -2, // Ensure home always appears first
+          },
+          ...(newdata ? [newdata] : []),
+          ...pagesData,
+        ];
 
         // Sort the final array by sortOrder
-        const sortedPages = finalPages.sort((a, b) =>
-          (a.sortOrder || 0) - (b.sortOrder || 0)
+        const sortedPages = finalPages.sort(
+          (a, b) => (a.sortOrder || 0) - (b.sortOrder || 0),
         );
 
-        setPages(sortedPages)
-        setSettings(settingsData)
+        setPages(sortedPages);
+        setSettings(settingsData);
       } catch (err) {
-        setError("Failed to load data")
-        console.error("Error fetching data:", err)
+        setError("Failed to load data");
+        console.error("Error fetching data:", err);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   // Helper function to check if link is active
   const isActive = (slug: string) => {
-    if (slug === "" && pathname === "/") return true
-    if (slug !== "" && pathname === `/${slug}`) return true
-    return false
-  }
+    if (slug === "" && pathname === "/") return true;
+    if (slug !== "" && pathname === `/${slug}`) return true;
+    return false;
+  };
 
   if (error) {
-    return null // Or a more graceful fallback
+    return null; // Or a more graceful fallback
   }
 
   return (
@@ -117,13 +121,15 @@ export function Navigation() {
             {/* Mobile logo - no animation */}
             <div className="sm:hidden flex items-center gap-3">
               <Link href="/" className="flex items-center gap-3">
-                {settings?.showLogoInMenu && (<Image
-                  src={urlForImage(settings?.logo)?.url() || "/logo.svg"}
-                  alt="Logo"
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 align-middle my-0.5 rounded-full"
-                />)}
+                {settings?.showLogoInMenu && (
+                  <Image
+                    src={urlForImage(settings?.logo)?.url() || "/logo.svg"}
+                    alt="Logo"
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 align-middle my-0.5 rounded-full"
+                  />
+                )}
                 {settings?.showTextInMenu && (
                   <span className="text-lg font-semibold">
                     {settings?.websiteName}
@@ -139,13 +145,15 @@ export function Navigation() {
                 className="flex items-center gap-3"
               >
                 <Link href="/" className="flex items-center gap-3">
-                  {settings?.showLogoInMenu && (<Image
-                    src={urlForImage(settings?.logo)?.url() || "/logo.svg"}
-                    alt="Logo"
-                    width={32}
-                    height={32}
-                    className="h-8 w-8 align-middle my-0.5 rounded-full"
-                  />)}
+                  {settings?.showLogoInMenu && (
+                    <Image
+                      src={urlForImage(settings?.logo)?.url() || "/logo.svg"}
+                      alt="Logo"
+                      width={32}
+                      height={32}
+                      className="h-8 w-8 align-middle my-0.5 rounded-full"
+                    />
+                  )}
                   {settings?.showTextInMenu && (
                     <span className="text-lg font-semibold">
                       {settings?.websiteName}
@@ -163,7 +171,9 @@ export function Navigation() {
               className="flex space-x-4 relative"
             >
               {isLoading ? (
-                <span className="text-muted-foreground"><Skeleton className="w-80 h-6" /></span>
+                <span className="text-muted-foreground">
+                  <Skeleton className="w-80 h-6" />
+                </span>
               ) : (
                 pages.map((page) => (
                   <Link
@@ -175,13 +185,20 @@ export function Navigation() {
                       <motion.div
                         layoutId="active-page"
                         className="absolute inset-0 bg-accent rounded-md"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
                       />
                     )}
-                    <span className={`relative z-10 ${isActive(page.slug.toString())
-                        ? "text-black dark:text-black"
-                        : "text-foreground/90 hover:text-foreground"
-                      }`}>
+                    <span
+                      className={`relative z-10 ${
+                        isActive(page.slug.toString())
+                          ? "text-black dark:text-black"
+                          : "text-foreground/90 hover:text-foreground"
+                      }`}
+                    >
                       {page.title}
                     </span>
                   </Link>
@@ -204,7 +221,7 @@ export function Navigation() {
             >
               <span className="sr-only">Open main menu</span>
               <svg
-                className={`${isMobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
+                className={`${isMobileMenuOpen ? "hidden" : "block"} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -219,7 +236,7 @@ export function Navigation() {
                 />
               </svg>
               <svg
-                className={`${isMobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
+                className={`${isMobileMenuOpen ? "block" : "hidden"} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -243,9 +260,9 @@ export function Navigation() {
           className="sm:hidden overflow-hidden"
           initial={false}
           animate={{
-            height: isMobileMenuOpen ? 'auto' : 0,
+            height: isMobileMenuOpen ? "auto" : 0,
             opacity: isMobileMenuOpen ? 1 : 0,
-            pointerEvents: isMobileMenuOpen ? 'auto' : 'none'
+            pointerEvents: isMobileMenuOpen ? "auto" : "none",
           }}
           transition={{ duration: 0.2 }}
         >
@@ -257,10 +274,11 @@ export function Navigation() {
                 <Link
                   key={page._id}
                   href={`/${page.slug}`}
-                  className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActive(page.slug.toString())
+                  className={`block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isActive(page.slug.toString())
                       ? "bg-accent text-accent dark:text-accent"
                       : "text-foreground/90 hover:text-foreground hover:bg-accent/10"
-                    }`}
+                  }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {page.title}
@@ -271,5 +289,5 @@ export function Navigation() {
         </motion.div>
       </div>
     </nav>
-  )
+  );
 }

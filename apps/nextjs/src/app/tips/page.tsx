@@ -13,14 +13,14 @@ const POSTS_PER_PAGE = 6;
 
 const QUERY = `{
   "posts": *[_type == "post" && defined(slug.current)]|order(publishedAt desc),
-  "intro": *[_type == "blockdocument" && tag == "blog-intro"][0]{
+  "intro": *[_type == "blockdocument" && tag == "tips-intro"][0]{
     html,
     content
   },
   "total": count(*[_type == "post" && defined(slug.current)])
 }`;
 
-interface BlogData {
+interface TipsData {
   posts: any[];
   intro?: {
     html?: {
@@ -33,13 +33,13 @@ interface BlogData {
 
 export default function IndexPage() {
   const [page, setPage] = useState(1);
-  const [data, setData] = useState<BlogData | null>(null);
+  const [data, setData] = useState<TipsData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { posts, intro, total } = await client.fetch<BlogData>(QUERY);
+      const { posts, intro, total } = await client.fetch<TipsData>(QUERY);
       setData({ posts, intro, total });
       setLoading(false);
     };
@@ -62,7 +62,7 @@ export default function IndexPage() {
 
   return (
     <main className="container mx-auto min-h-screen max-w-5xl p-8">
-      <h1 className="text-4xl font-bold mb-8">Blog</h1>
+      <h1 className="text-4xl font-bold mb-8">Tips</h1>
 
       {intro && (
         <div className="prose dark:prose-invert mb-12">
@@ -77,7 +77,7 @@ export default function IndexPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-y-10">
         {currentPosts.map((post) => (
           <div key={post._id} className="flex flex-col h-full">
-            <Link href={`/blog/${post.slug.current}`} className="no-underline cursor-pointer group">
+            <Link href={`/tips/${post.slug.current}`} className="no-underline cursor-pointer group">
               <div className="aspect-video relative overflow-hidden rounded-xl">
                 <Image
                   src={urlForImage(post.image)?.url() || "/placeholder.png"}
