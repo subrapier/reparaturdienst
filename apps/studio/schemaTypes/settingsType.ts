@@ -1,5 +1,5 @@
-import { defineField, defineType } from 'sanity'
-import { WrenchIcon } from '@sanity/icons'
+import {defineField, defineType} from 'sanity'
+import {WrenchIcon} from '@sanity/icons'
 
 export const settingsType = defineType({
   name: 'settings',
@@ -44,15 +44,12 @@ export const settingsType = defineType({
     defineField({
       name: 'favicon',
       title: 'Favicon',
-      type: 'image'
+      type: 'image',
     }),
     defineField({
       name: 'accentColor',
       title: 'Accent Color',
       type: 'color',
-      initialValue: {
-        hex: '#ffffff'
-      },
       options: {
         disableAlpha: true,
       },
