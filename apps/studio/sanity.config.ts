@@ -18,9 +18,9 @@ import {media} from 'sanity-plugin-media'
 
 export default defineConfig({
   name: 'default',
-  title: process.env.SANITY_STUDIO_TITLE || 'Sanity Studio',
+  title: process.env.SANITY_STUDIO_TITLE || "Jamie's Reparaturdienst",
 
-  projectId: process.env.SANITY_PROJECT_ID || 'tm8059cg',
+  projectId: process.env.SANITY_PROJECT_ID || '3ex1dz2d',
   dataset: process.env.SANITY_DATASET || 'production',
 
   projectVersion: process.env.SANITY_STUDIO_VERSION || '2024-01-01',
