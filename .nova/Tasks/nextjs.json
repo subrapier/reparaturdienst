@@ -1,0 +1,13 @@
+{
+  "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : "bun run build"
+    },
+    "run" : {
+      "enabled" : true,
+      "script" : "bun run dev"
+    }
+  },
+  "openLogOnRun" : "start"
+}

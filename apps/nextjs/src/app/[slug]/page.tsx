@@ -8,7 +8,7 @@ const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]`;
 
 const options = { next: { revalidate: 30 } };
 
-export default async function PostPage({
+export default async function TipPage({
   params,
 }: {
   params: Promise<{ slug: string }>;

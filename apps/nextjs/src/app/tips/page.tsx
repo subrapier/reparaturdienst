@@ -12,16 +12,16 @@ import { client } from "@/sanity/client";
 const POSTS_PER_PAGE = 6;
 
 const QUERY = `{
-  "posts": *[_type == "post" && defined(slug.current)]|order(publishedAt desc),
+  "tips": *[_type == "tip" && defined(slug.current)]|order(publishedAt desc),
   "intro": *[_type == "blockdocument" && tag == "tips-intro"][0]{
     html,
     content
   },
-  "total": count(*[_type == "post" && defined(slug.current)])
+  "total": count(*[_type == "tip" && defined(slug.current)])
 }`;
 
 interface TipsData {
-  posts: any[];
+  tips: any[];
   intro?: {
     html?: {
       code: string;
@@ -39,8 +39,8 @@ export default function IndexPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { posts, intro, total } = await client.fetch<TipsData>(QUERY);
-      setData({ posts, intro, total });
+      const { tips, intro, total } = await client.fetch<TipsData>(QUERY);
+      setData({ tips, intro, total });
       setLoading(false);
     };
 
@@ -55,10 +55,10 @@ export default function IndexPage() {
     return <p>Error loading data.</p>;
   }
 
-  const { posts, intro, total } = data;
+  const { tips, intro, total } = data;
   const totalPages = Math.ceil(total / POSTS_PER_PAGE);
   const offset = (page - 1) * POSTS_PER_PAGE;
-  const currentPosts = posts.slice(offset, offset + POSTS_PER_PAGE);
+  const currentTips = tips.slice(offset, offset + POSTS_PER_PAGE);
 
   return (
     <main className="container mx-auto min-h-screen max-w-5xl p-8">
@@ -75,28 +75,28 @@ export default function IndexPage() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 gap-y-10">
-        {currentPosts.map((post) => (
-          <div key={post._id} className="flex flex-col h-full">
-            <Link href={`/tips/${post.slug.current}`} className="no-underline cursor-pointer group">
+        {currentTips.map((tip) => (
+          <div key={tip._id} className="flex flex-col h-full">
+            <Link href={`/tips/${tip.slug.current}`} className="no-underline cursor-pointer group">
               <div className="aspect-video relative overflow-hidden rounded-xl">
                 <Image
-                  src={urlForImage(post.image)?.url() || "/placeholder.png"}
-                  alt={post.title}
+                  src={urlForImage(tip.image)?.url() || "/placeholder.png"}
+                  alt={tip.title}
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
               <h2 className="text-xl font-semibold text-foreground mt-4 group-hover:text-accent transition-colors">
-                {post.title}
+                {tip.title}
               </h2>
               <p className="text-muted-foreground">
-                {new Date(post.publishedAt).toLocaleDateString()}
+                {new Date(tip.publishedAt).toLocaleDateString()}
               </p>
             </Link>
           </div>
         ))}
-        {currentPosts.length === 0 && (
-          <p className="text-muted-foreground col-span-2">No posts found :&#40;</p>
+        {currentTips.length === 0 && (
+          <p className="text-muted-foreground col-span-2">No tips found :&#40;</p>
         )}
       </div>
 

@@ -27,7 +27,7 @@ async function generateRssFeed() {
         language: 'en',
     })
 
-    const query = `*[_type == "post"] | order(publishedAt desc) {
+    const query = `*[_type == "tip"] | order(publishedAt desc) {
         title,
         slug,
         publishedAt,
@@ -35,14 +35,14 @@ async function generateRssFeed() {
         body
     }`
 
-    const posts = await client.fetch(query)
+    const tips = await client.fetch(query)
 
-    posts.forEach((post: any) => {
+    tips.forEach((tip: any) => {
         feed.item({
-            title: post.title,
-            description: toHTML(post.body),
-            url: `${settings.websiteUrl}/tips/${post.slug.current}`,
-            date: new Date(post.publishedAt),
+            title: tip.title,
+            description: toHTML(tip.body),
+            url: `${settings.websiteUrl}/tips/${tip.slug.current}`,
+            date: new Date(tip.publishedAt),
         })
     })
 

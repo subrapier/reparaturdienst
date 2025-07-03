@@ -4,18 +4,18 @@ import { client } from "@/sanity/client";
 import Image from "next/image";
 import { urlForImage } from "@/sanity/image";
 
-const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]`;
+const POST_QUERY = `*[_type == "tip" && slug.current == $slug][0]`;
 
 const options = { next: { revalidate: 30 } };
 
-export default async function PostPage({
+export default async function TipPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const post = await client.fetch<SanityDocument>(POST_QUERY, await params, options);
+  const tip = await client.fetch<SanityDocument>(POST_QUERY, await params, options);
   
-  if (!post) {
+  if (!tip) {
     return (
       <>
         <h1 className="text-4xl font-bold mb-8">Error 404</h1>
@@ -30,20 +30,20 @@ export default async function PostPage({
 
   return (
     <>
-      {post.image && (
+      {tip.image && (
         <Image
-          src={urlForImage(post.image)?.url() || "/placeholder.png"}
-          alt={post.title}
+          src={urlForImage(tip.image)?.url() || "/placeholder.png"}
+          alt={tip.title}
           className="aspect-video rounded-xl w-full my-8"
           width={640}
           height={640}
         />
       )}
-      <h1 className="text-4xl font-bold">{post.title}</h1>
+      <h1 className="text-4xl font-bold">{tip.title}</h1>
       <p className="uppercase font-bold text-muted-foreground mb-8">
-        Published: {new Date(post.publishedAt).toLocaleDateString()}
+        Published: {new Date(tip.publishedAt).toLocaleDateString()}
       </p>
-      {Array.isArray(post.body) && <PortableText value={post.body} />}
+      {Array.isArray(tip.body) && <PortableText value={tip.body} />}
     </>
   );
 }
