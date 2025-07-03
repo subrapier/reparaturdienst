@@ -33,32 +33,55 @@ export default defineConfig({
           .items([
             S.listItem()
               .title('Tips')
-              .child(S.documentList().title('Tips').filter('_type == "tip"'))
+              .child(
+                S.documentList().title('Tips').apiVersion('v2025-07-04').filter('_type == "tip"'),
+              )
               .icon(ComposeIcon),
             S.listItem()
               .title('Pages')
-              .child(S.documentList().title('Pages').filter('_type == "page"'))
+              .child(
+                S.documentList().title('Pages').apiVersion('v2025-07-04').filter('_type == "page"'),
+              )
               .icon(DocumentIcon),
             S.listItem()
               .title('Notes')
-              .child(S.documentList().title('Notes').filter('_type == "note"'))
+              .child(
+                S.documentList().title('Notes').apiVersion('v2025-07-04').filter('_type == "note"'),
+              )
               .icon(DocumentTextIcon),
             S.divider(),
             S.listItem()
               .title('Avatars')
-              .child(S.documentList().title('Avatars').filter('_type == "avatar"'))
+              .child(
+                S.documentList()
+                  .title('Avatars')
+                  .apiVersion('v2025-07-04')
+                  .filter('_type == "avatar"'),
+              )
               .icon(UsersIcon),
             S.listItem()
               .title('Blocks')
-              .child(S.documentList().title('Blocks').filter('_type == "blockdocument"'))
+              .child(
+                S.documentList()
+                  .title('Blocks')
+                  .apiVersion('v2025-07-04')
+                  .filter('_type == "blockdocument"'),
+              )
               .icon(CodeBlockIcon),
             S.listItem()
               .title('Cards')
-              .child(S.documentList().title('Cards').filter('_type == "card"'))
+              .child(
+                S.documentList().title('Cards').apiVersion('v2025-07-04').filter('_type == "card"'),
+              )
               .icon(BlockElementIcon),
             S.listItem()
               .title('Socials')
-              .child(S.documentList().title('Socials').filter('_type == "social"'))
+              .child(
+                S.documentList()
+                  .title('Socials')
+                  .apiVersion('v2025-07-04')
+                  .filter('_type == "social"'),
+              )
               .icon(DiamondIcon),
             S.divider(),
             S.listItem()
