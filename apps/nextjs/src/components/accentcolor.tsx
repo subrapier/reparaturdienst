@@ -1,14 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { client } from "@/sanity/client";
 import * as culori from "culori";
-
-interface Settings {
-  accentColor: {
-    hex: string;
-  };
-}
 
 export default function AccentColor() {
   const [oklchString, setOklchString] = useState("oklch(0 0 0)");
