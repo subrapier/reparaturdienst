@@ -60,24 +60,25 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         {settings?.favicon && (
-          <link 
-            rel="shortcut icon" 
-            href={urlForImage(settings?.favicon)?.url() || "/favicon.ico"} 
+          <link
+            rel="shortcut icon"
+            href={urlForImage(settings?.favicon)?.url() || "/favicon.ico"}
           />
         )}
-        <link rel="alternate" type="application/rss+xml" 
-          title={`${settings?.websiteName || '...'} RSS Feed`}
-          href="/feed.rss" />
-        <title>{settings?.websiteName || '...'}</title>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${settings?.websiteName || "..."} RSS Feed`}
+          href="/feed.rss"
+        />
+        <title>{settings?.websiteName || "..."}</title>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navigation />
         <main className="container mx-auto min-h-screen max-w-4xl p-8 flex flex-col gap-4">
-          <div className="prose">
-            {children}
-          </div>
+          <div className="prose">{children}</div>
         </main>
         <Footer />
         <ScrollToTop />
