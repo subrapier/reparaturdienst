@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import { client } from "@/sanity/client"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { client } from "@/sanity/client";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGithub,
   faMastodon,
@@ -25,94 +25,92 @@ import {
   faXbox,
   faPlaystation,
   faSteam,
-  faWordpress
-} from "@fortawesome/free-brands-svg-icons"
-import { faGlobe, faRss } from "@fortawesome/free-solid-svg-icons"
-import Image from "next/image"
-import Webrings from "./webrings"
+  faWordpress,
+} from "@fortawesome/free-brands-svg-icons";
+import { faGlobe, faRss } from "@fortawesome/free-solid-svg-icons";
 
 interface LegalPage {
-  _id: string
-  slug: string
-  title: string
+  _id: string;
+  slug: string;
+  title: string;
 }
 
 interface Social {
-  _id: string
+  _id: string;
   slug: {
-    current: string
-  }
-  url: string
+    current: string;
+  };
+  url: string;
 }
 
 interface Settings {
-  websiteName: string
+  websiteName: string;
 }
 
 const getSocialIcon = (slug: string) => {
   switch (slug) {
     case "github":
-      return faGithub
+      return faGithub;
     case "mastodon":
-      return faMastodon
+      return faMastodon;
     case "discord":
-      return faDiscord
+      return faDiscord;
     case "instagram":
-      return faInstagram
+      return faInstagram;
     case "linkedin":
-      return faLinkedin
+      return faLinkedin;
     case "bluesky":
-      return faBluesky
+      return faBluesky;
     case "twitch":
-      return faTwitch
+      return faTwitch;
     case "facebook":
-      return faFacebook
+      return faFacebook;
     case "twitter":
-      return faXTwitter
+      return faXTwitter;
     case "youtube":
-      return faYoutube
+      return faYoutube;
     case "tiktok":
-      return faTiktok
+      return faTiktok;
     case "x":
-      return faXTwitter
+      return faXTwitter;
     case "telegram":
-      return faTelegram
+      return faTelegram;
     case "mastodon":
-      return faMastodon
+      return faMastodon;
     case "flickr":
-      return faFlickr
+      return faFlickr;
     case "whatsapp":
-      return faWhatsapp
+      return faWhatsapp;
     case "snapchat":
-      return faSnapchat
+      return faSnapchat;
     case "imdb":
-      return faImdb
+      return faImdb;
     case "lastfm":
-      return faLastfm
+      return faLastfm;
     case "diaspora":
-      return faDiaspora
+      return faDiaspora;
     case "threads":
-      return faThreads
+      return faThreads;
     case "xbox":
-      return faXbox
+      return faXbox;
     case "playstation":
-      return faPlaystation
+      return faPlaystation;
     case "steam":
-      return faSteam
+      return faSteam;
     case "wordpress":
-      return faWordpress
+      return faWordpress;
     case "rss":
-      return faRss
+      return faRss;
     default:
-      return faGlobe
+      return faGlobe;
   }
-}
+};
 
 export function Footer() {
-  const currentYear = new Date().getFullYear()
-  const [legalPages, setLegalPages] = useState<LegalPage[]>([])
-  const [socials, setSocials] = useState<Social[]>([])
-  const [settings, setSettings] = useState<Settings | null>(null)
+  const currentYear = new Date().getFullYear();
+  const [legalPages, setLegalPages] = useState<LegalPage[]>([]);
+  const [socials, setSocials] = useState<Social[]>([]);
+  const [settings, setSettings] = useState<Settings | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,15 +133,15 @@ export function Footer() {
           *[_type == "settings"][0] {
             websiteName
           }
-        `)
-      ])
-      setLegalPages(pagesData)
-      setSocials(socialsData)
-      setSettings(settingsData)
-    }
+        `),
+      ]);
+      setLegalPages(pagesData);
+      setSocials(socialsData);
+      setSettings(settingsData);
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   return (
     <footer className="bg-muted py-6 mt-auto">
@@ -151,7 +149,8 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
           <div className="flex flex-col space-y-4">
             <div className="text-sm text-muted-foreground">
-              © {currentYear} {settings?.websiteName || 'Company'}. All rights reserved.
+              © {currentYear} {settings?.websiteName || "Company"}. All rights
+              reserved.
             </div>
             {socials.length > 0 && (
               <div className="flex space-x-2">
@@ -186,17 +185,8 @@ export function Footer() {
               ))}
             </nav>
           )}
-          <div className="mt-4 sm:mt-0 flex justify-end align-middle">
-            <Image
-              src="/service-banner.png"
-              width={200}
-              height={32}
-              alt="Service Banner"
-            />
-          </div>
-          <Webrings />
         </div>
       </div>
     </footer>
-  )
+  );
 }
