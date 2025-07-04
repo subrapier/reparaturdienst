@@ -15,26 +15,16 @@ export default function AccentColor() {
   const [textColor, setTextColor] = useState("oklch(1 0 0)");
   useEffect(() => {
     const fetchAccentColor = async () => {
-      try {
-        const settings = await client.fetch<Settings>(`
-                    *[_type == "settings"][0] {
-                        accentColor
-                    }
-                `);
+      const hex = "#ED0F35";
+      // Convert directly to OKLCH
+      const color = culori.oklch(culori.parse(hex));
+      if (color) {
+        const oklchString = `oklch(${color.l} ${color.c} ${color.h})`;
+        setOklchString(oklchString);
 
-        const hex = "#ED0F35";
-        // Convert directly to OKLCH
-        const color = culori.oklch(culori.parse(hex));
-        if (color) {
-          const oklchString = `oklch(${color.l} ${color.c} ${color.h})`;
-          setOklchString(oklchString);
-
-          // Calculate text color based on lightness
-          const textColor = color.l > 0.5 ? "oklch(0 0 0)" : "oklch(1 0 0)";
-          setTextColor(textColor);
-        }
-      } catch (err) {
-        console.error("Error fetching accent color:", err);
+        // Calculate text color based on lightness
+        const textColor = color.l > 0.5 ? "oklch(0 0 0)" : "oklch(1 0 0)";
+        setTextColor(textColor);
       }
     };
 
